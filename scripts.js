@@ -1,11 +1,3 @@
-// const client = contentful.createClient({
-//   // This is the space ID. A space is like a project folder in Contentful terms
-//   space: "YOUR API KEY",
-//   // This is the access token for this space. Normally you get both ID and the token in the Contentful web app
-//   accessToken:
-//     "YOUR API KEY"
-// });
-
 // variables
 const cartBtn = document.querySelector(".cart-btn");
 const closeCartBtn = document.querySelector(".close-cart");
@@ -24,12 +16,6 @@ class Products {
         try {
             let result = await fetch("products.json");
             let data = await result.json();
-            // let contentful = await client.getEntries({
-            //   content_type: "comfyHouseProducts"
-            // });
-            // console.log(contentful.items);
-            // console.log(data);
-
             let products = data.items;
             products = products.map(item => {
                 const { title, price } = item.fields;
@@ -62,7 +48,7 @@ class UI {
             />
             <button class="bag-btn" data-id=${product.id}>
               <i class="fas fa-shopping-cart"></i>
-              add to bag
+              add to cart
             </button>
           </div>
           <h3>${product.title}</h3>
@@ -85,7 +71,7 @@ class UI {
             } else {
                 button.addEventListener("click", event => {
                     // disable button
-                    event.target.innerText = "In Bag";
+                    event.target.innerText = "In Cart";
                     event.target.disabled = true;
                     // add to cart
                     let cartItem = { ...Storage.getProduct(id), amount: 1 };
@@ -168,9 +154,9 @@ class UI {
                 cartContent.removeChild(removeItem.parentElement.parentElement);
                 const buttons = [...document.querySelectorAll(".bag-btn")];
                 buttons.forEach(button => {
-                    if (parseInt(button.dataset.id) === id) {
+                    if (button.dataset.id === id) {
                         button.disabled = false;
-                        button.innerHTML = `<i class="fas fa-shopping-cart"></i>add to bag`;
+                        button.innerHTML = `<i class="fas fa-shopping-cart"></i>add to cart`;
                     }
                 });
             } else if (event.target.classList.contains("fa-chevron-up")) {
@@ -217,7 +203,7 @@ class UI {
         const buttons = [...document.querySelectorAll(".bag-btn")];
         buttons.forEach(button => {
             button.disabled = false;
-            button.innerHTML = `<i class="fas fa-shopping-cart"></i>add to bag`;
+            button.innerHTML = `<i class="fas fa-shopping-cart"></i>add to cart`;
         });
         while (cartContent.children.length > 0) {
             cartContent.removeChild(cartContent.children[0]);
